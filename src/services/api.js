@@ -29,7 +29,12 @@ async function getUser(token) {
 async function shortenLink(token, link) {
   const config = createConfig(token);
 
-  await axios.post(`${BASE_URL}/urls/shorten`, { link }, config);
+  await axios.post(`${BASE_URL}/urls/shorten`, { url: link }, config);
+}
+
+async function shortenUrls(userId) {
+  const shortenUrls = await axios.get(`${BASE_URL}/users/${userId}`);
+  return shortenUrls;
 }
 
 async function deleteLink(token, id) {
@@ -43,6 +48,7 @@ const api = {
   login,
   getUser,
   shortenLink,
+  shortenUrls,
   deleteLink
 }
 

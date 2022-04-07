@@ -9,8 +9,15 @@ import { Container, DeleteButton, Flex, Span, StyledLink, Title, Url, UrlLink } 
 function Home() {
   const [user, setUser] = useState(null);
   const [reload, setReload] = useState(true);
-  const { auth } = useAuth();
+  const [shortenUrls, setShortenUrls] = useState(null);
   const [link, setLink] = useState('');
+  const { auth } = useAuth();
+
+  useEffect(() => {
+    if (!reload) return;
+
+    loadPage();
+  }, [auth, reload]);
 
   async function handleShortenButtonClick() {
     if (!auth) {
@@ -20,35 +27,36 @@ function Home() {
 
     try {
       await api.shortenLink(auth, link);
+
       setReload(true);
+      setLink('');
     } catch (error) {
       console.log(error);
-      alert("Erro, recarregue a página em alguns segundos");
+      alert("Erro, não foi possível enviar o link!");
     }
   }
 
-  useEffect(() => {
-    if (!reload) return;
-
-    async function loadPage() {
-      setReload(false);
-      if (!auth) {
-        return;
-      }
-  
-      try {
-        const { data } = await api.getUser(auth);
-        console.log(data);
-        setUser(data);
-      } catch (error) {
-        console.log(error);
-        alert("Erro, recarregue a página em alguns segundos");
-        setUser({});
-      }
+  async function loadPage() {
+    setReload(false);
+    if (!auth) {
+      return;
     }
 
-    loadPage();
-  }, [auth, reload])
+    try {
+      const promiseUser = await api.getUser(auth);
+      console.log(promiseUser.data);
+
+      const promiseShortenUrls = await api.shortenUrls(promiseUser.data.id);
+      console.log(promiseShortenUrls.data);      
+
+      setUser(promiseUser.data);
+      setShortenUrls(promiseShortenUrls.data);
+    } catch (error) {
+      console.log(error);
+      alert("Erro, recarregue a página em alguns segundos");
+      setUser({});
+    }
+  }
 
   if (auth && !user) {
     return <h2>Carregando...</h2>
@@ -75,7 +83,7 @@ function Home() {
           <Input value={link} onChange={e => setLink(e.target.value)} placeholder='Links que cabem no bolso' />  
           <Button onClick={handleShortenButtonClick} maxWidth="182px">Encurtar Link</Button>
         </Flex>
-        {user && <Urls token={auth} urls={user.shortenedUrls} />}
+        {user && <Urls token={auth} urls={shortenUrls?.shortenedUrls} />}
       </Flex>
     </Container>
   );
@@ -84,16 +92,16 @@ function Home() {
 function Urls({ token, urls }) {
   async function handleDelete(id) {
     try {
-      await api.deleteLink(token, id)
+      await api.deleteLink(token, id);
     } catch (error) {
       console.log(error);
-      alert("Erro, recarregue a página em alguns segundos");
+      alert("Erro, não foi possível deletar o link!");
     }
   }
 
   return (
     <Flex width="100%" margin="58px 0px 0px 0px" direction="column" gap="40px">
-      {urls.map(url => (
+      {urls?.map(url => (
         <Url key={url.id}>
           <Flex justifyContent="space-between" alignItems="center" gap="75px">
             <UrlLink color="#FFF" fontWeight="400">{url.url}</UrlLink>
