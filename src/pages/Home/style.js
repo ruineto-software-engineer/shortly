@@ -21,12 +21,11 @@ const Container = styled.div`
 const Flex = styled.div`
   display: flex;
   flex-direction: ${(props) => props.direction || 'initial'};
-  justify-content: ${(props) => props.justifyContent || 'initial'};
+  justify-content: ${(props) => props.justifyContent || 'flex-end'};
   align-items: ${(props) => props.alignItems || 'initial'};
   align-self: ${(props) => props.alignSelf || 'initial'};
-  gap: ${(props) => props.gap || '0px'};
-  width: ${(props) => props.width || 'initial'};
-  margin: ${(props) => props.margin || 'initial'};
+  gap: 22px;
+  width: 1018px;
 `;
 
 const StyledLink = styled(Link)`
@@ -36,7 +35,7 @@ const StyledLink = styled(Link)`
   line-height: 18px;
 
   color: ${(props) => props.active ? '#5D9040' : '#9C9C9C'};
-`
+`;
 
 const Title = styled.h2`
   display: flex;
@@ -78,6 +77,7 @@ const Span = styled.span`
   font-weight: ${(props) => props.fontWeight || 'initial'};
   font-size: 14px;
   line-height: 18px;
+  margin-right: 35px;
   text-align: ${(props) => props.align || "initial"};
 
   color: ${(props) => props.color || "initial"};
@@ -90,7 +90,14 @@ const UrlLink = styled.a`
   line-height: 18px;
   text-align: ${(props) => props.align || "initial"};
 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 255px;
+
   color: ${(props) => props.color || "initial"};
+
+  cursor: pointer;
 `;
 
 const Url = styled.div`
@@ -105,6 +112,89 @@ const Url = styled.div`
   padding-left: 20px;
 `;
 
+const ContainerRanking = styled.div`
+  width: 1018px;
+  min-height: 356px;
+
+  background-color: aqua;
+
+  margin-top: 80px;
+  margin-bottom: 50px;
+
+  padding: 26px;
+
+  background: #FFFFFF;
+  border: 1px solid rgba(120, 177, 89, 0.25);
+  box-shadow: 0px 4px 24px rgba(120, 177, 89, 0.12);
+  border-radius: 24px 24px 0px 0px;  
+`;
+
+const ContentRanking = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  width: 100%;
+  height: 100%;
+`;
+
+const TitleRanking = styled.div`
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 34px;
+
+  font-family: 'Lexend Deca';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 45px;
+
+  color: #000000;
+
+  img{
+    margin-right: 10px;
+  }
+`;
+
+const ContainerUsers = styled.ol`
+  font-family: 'Lexend Deca';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+
+  color: #000000;
+
+  display: flex;
+  flex-direction: column;
+  
+  gap: 17px;
+
+  li:nth-child(1){
+    font-size: 26px;
+    line-height: 32px;
+    margin-left: 15px;
+  }
+
+  li:nth-child(2){
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  li:nth-child(3){
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  li{
+    list-style-type: auto;
+    list-style-position: inside;
+  }
+`;
+
 export {
   Container,
   Flex,
@@ -113,5 +203,9 @@ export {
   Title,
   DeleteButton,
   Url,
-  UrlLink
+  UrlLink,
+  ContainerRanking,
+  ContentRanking,
+  TitleRanking,
+  ContainerUsers
 };

@@ -43,13 +43,25 @@ async function deleteLink(token, id) {
   await axios.delete(`${BASE_URL}/urls/${id}`, config);
 }
 
+async function getUrl(shortenUrl) {
+  const url = await axios.get(`${BASE_URL}/urls/${shortenUrl}`);
+  return url;
+}
+
+async function getRanking() {
+  const ranking = await axios.get(`${BASE_URL}/users/ranking`);
+  return ranking;
+}
+
 const api = {
   createUser,
   login,
   getUser,
   shortenLink,
   shortenUrls,
-  deleteLink
+  deleteLink,
+  getUrl,
+  getRanking
 }
 
 export default api;
