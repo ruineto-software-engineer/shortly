@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Button, Container, Form, Input, StyledLink } from '../../components/FormComponents';
+import { ReactComponent as Logo } from '../../assets/Logo.svg';
 import useAuth from '../../hooks/useAuth';
 import api from '../../services/api';
-
+import { Button, Container, Form, Input, StyledLink } from '../../components/FormComponents';
+import { Title } from "../Home/style";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -34,6 +35,11 @@ function Login() {
 
   return (
     <Container>
+      <Title marginBottom='40px'>
+        Shortly
+        <Logo />
+      </Title>
+
       <Form onSubmit={handleSubmit}>
         <Input
           placeholder="E-mail"

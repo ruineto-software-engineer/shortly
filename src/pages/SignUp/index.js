@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Button, Container, Form, Input, StyledLink } from '../../components/FormComponents';
+import { ReactComponent as Logo } from '../../assets/Logo.svg';
 import api from '../../services/api';
-
+import { Button, Container, Form, Input, StyledLink } from '../../components/FormComponents';
+import { Title } from "../Home/style";
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -39,6 +40,11 @@ function SignUp() {
 
   return (
     <Container>
+      <Title marginBottom='40px'>
+        Shortly
+        <Logo />
+      </Title>
+
       <Form onSubmit={handleSubmit}>
         <Input
           placeholder="Nome"

@@ -53,6 +53,11 @@ async function getRanking() {
   return ranking;
 }
 
+async function getAllUrls() {
+  const allUrls = await axios.get(`${BASE_URL}/urls`);
+  return allUrls;
+}
+
 const api = {
   createUser,
   login,
@@ -61,7 +66,8 @@ const api = {
   shortenUrls,
   deleteLink,
   getUrl,
-  getRanking
+  getRanking,
+  getAllUrls
 }
 
 export default api;

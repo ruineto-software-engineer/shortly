@@ -11,6 +11,7 @@ import {
   Flex,
   Span,
   StyledLink,
+  Logout,
   Title,
   Url,
   UrlLink,
@@ -60,17 +61,22 @@ function Home() {
 
   async function loadPage() {
     setReload(false);
-    if (!auth) {
-      return;
-    }
 
     try {
-      const promiseUser = await api.getUser(auth);
-      const promiseShortenUrls = await api.shortenUrls(promiseUser.data.id);
-      const promiseRanking = await api.getRanking();
+      if (auth) {
+        const promiseUser = await api.getUser(auth);
+        const promiseShortenUrls = await api.shortenUrls(promiseUser.data.id);
 
-      setUser(promiseUser.data);
-      setShortenUrls(promiseShortenUrls.data);
+        setUser(promiseUser.data);
+        setShortenUrls(promiseShortenUrls.data);
+      } else {
+        const promiseAllUrls = await api.getAllUrls();
+        
+        setShortenUrls(promiseAllUrls.data);
+      }
+
+      const promiseRanking = await api.getRanking();
+      
       setRanking(promiseRanking.data);
     } catch (error) {
       console.log(error);
@@ -81,13 +87,14 @@ function Home() {
 
   function handleLogout() {
     localStorage.removeItem('auth');
-
-    setReload(true);
+    window.location.reload(true);
   }
 
   if (auth && !user) {
     return <h2>Carregando...</h2>
   }
+
+  console.log(shortenUrls);
 
   return (
     <Container padding="60px 70px 0px 70px">
@@ -97,10 +104,10 @@ function Home() {
             <StyledLink to="/login" active="true">Entrar</StyledLink>
             <StyledLink to="/sign-up">Cadastrar-se</StyledLink>
           </>
-        :
-          <StyledLink to="/login" active="true" onClick={() => handleLogout()}>
+          :
+          <Logout onClick={() => handleLogout()}>
             Sair
-          </StyledLink>
+          </Logout>
         }
       </Flex>
 
@@ -115,33 +122,29 @@ function Home() {
           <Button onClick={handleShortenButtonClick} maxWidth="182px">Encurtar Link</Button>
         </Flex>
 
-        {user &&
-          <Urls
-            token={auth}
-            urls={shortenUrls?.shortenedUrls}
-            setReload={setReload}
-          />
-        }
+        <Urls
+          token={auth}
+          urls={shortenUrls?.shortenedUrls ? shortenUrls?.shortenedUrls : shortenUrls}
+          setReload={setReload}
+        />
       </Flex>
 
-      {auth &&
-        <ContainerRanking>
-          <ContentRanking>
-            <TitleRanking>
-              <img alt='TrophyIcon.svg' src={TrophyIcon} />
-              Ranking
-            </TitleRanking>
+      <ContainerRanking>
+        <ContentRanking>
+          <TitleRanking>
+            <img alt='TrophyIcon.svg' src={TrophyIcon} />
+            Ranking
+          </TitleRanking>
 
-            <ContainerUsers>
-              {ranking?.map((user) => {
-                return (
-                  <li key={user.id}>{`${user.name} - ${user.linksCount} ${user.linksCount > 1 ? "links" : "link"} - ${user.visitCount} ${user.visitCount > 1 ? "visualizações" : "visualização"}`}</li>
-                );
-              })}
-            </ContainerUsers>
-          </ContentRanking>
-        </ContainerRanking>
-      }
+          <ContainerUsers>
+            {ranking?.map((user) => {
+              return (
+                <li key={user.id}>{`${user.name} - ${user.linksCount} ${user.linksCount > 1 ? "links" : "link"} - ${user.visitCount} ${user.visitCount > 1 ? "visualizações" : "visualização"}`}</li>
+              );
+            })}
+          </ContainerUsers>
+        </ContentRanking>
+      </ContainerRanking>
     </Container>
   );
 }
@@ -157,6 +160,8 @@ function Urls({ token, urls, setReload }) {
       alert("Erro, não foi possível deletar o link!");
     }
   }
+
+  console.log(urls);
 
   async function handleUrl(shortUrl) {
     try {

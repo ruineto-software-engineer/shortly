@@ -37,6 +37,17 @@ const StyledLink = styled(Link)`
   color: ${(props) => props.active ? '#5D9040' : '#9C9C9C'};
 `;
 
+const Logout = styled.span`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+
+  cursor: pointer;
+
+  color: #5D9040;
+`;
+
 const Title = styled.h2`
   display: flex;
   align-items: center;
@@ -50,7 +61,7 @@ const Title = styled.h2`
   color: #000000;
 
   margin-top: 16px;
-  margin-bottom: 124px;
+  margin-bottom: ${(props) => props.marginBottom ? props.marginBottom : "124px"};
 `;
 
 const DeleteButton = styled.button`
@@ -199,6 +210,7 @@ export {
   Container,
   Flex,
   StyledLink,
+  Logout,
   Span,
   Title,
   DeleteButton,
