@@ -71,12 +71,12 @@ function Home() {
         setShortenUrls(promiseShortenUrls.data);
       } else {
         const promiseAllUrls = await api.getAllUrls();
-        
+
         setShortenUrls(promiseAllUrls.data);
       }
 
       const promiseRanking = await api.getRanking();
-      
+
       setRanking(promiseRanking.data);
     } catch (error) {
       console.log(error);
@@ -93,8 +93,6 @@ function Home() {
   if (auth && !user) {
     return <h2>Carregando...</h2>
   }
-
-  console.log(shortenUrls);
 
   return (
     <Container padding="60px 70px 0px 70px">
@@ -126,6 +124,7 @@ function Home() {
           token={auth}
           urls={shortenUrls?.shortenedUrls ? shortenUrls?.shortenedUrls : shortenUrls}
           setReload={setReload}
+          user={user}
         />
       </Flex>
 
@@ -149,7 +148,7 @@ function Home() {
   );
 }
 
-function Urls({ token, urls, setReload }) {
+function Urls({ token, urls, setReload, user }) {
   async function handleDelete(id) {
     try {
       await api.deleteLink(token, id);
@@ -160,8 +159,6 @@ function Urls({ token, urls, setReload }) {
       alert("Erro, não foi possível deletar o link!");
     }
   }
-
-  console.log(urls);
 
   async function handleUrl(shortUrl) {
     try {
@@ -198,9 +195,12 @@ function Urls({ token, urls, setReload }) {
             </UrlLink>
             <Span color="#FFF" fontWeight="400">Quantidade de visitantes: {url.visitCount}</Span>
           </Flex>
-          <DeleteButton onClick={() => handleDelete(url.id)}>
-            <DeleteIcon />
-          </DeleteButton>
+
+          {user &&
+            <DeleteButton onClick={() => handleDelete(url.id)}>
+              <DeleteIcon />
+            </DeleteButton>
+          }
         </Url>
       ))}
     </Flex>
